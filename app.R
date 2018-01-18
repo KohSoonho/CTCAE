@@ -10,16 +10,13 @@ source("helpers.R")
 ui <- fluidPage(
   titlePanel(h1("CTCAE")),  
     sidebarLayout(
-      sidebarPanel(checkboxGroupInput("display", label = h3("Displayed Column"), 
-                                      choices = list("MedDRA" = 1, 
-                                                     "SOC" = 2, 
-                                                     "Term" = 3, 
-                                                     "Grade" = 4:8, 
-                                                     "Definition" = 9, 
+      sidebarPanel(checkboxGroupInput("display", label = h3("View Hidden Column"), 
+                                      choices = list("MedDRA" = "MedDRA", 
+                                                     "Definition" = "Definition", 
                                                      "Errata(v4.0)" = "Errata", 
                                                      "Note(v5.0)" = "Note", 
                                                      "Change(v5.0)" = "Change"), 
-                                      select = c()), 
+                                      select = c("SOC", "Term", "Grade")), 
                    selectInput("SOC", label = h3("System Organ Class (SOC)"), 
                                       choices = list("All" = "All", 
                                                      "Blood and lymphatic" = "Blood and lymphatic system disorders", 
@@ -63,19 +60,32 @@ ui <- fluidPage(
 # Server logic----
 
 server <- function(input, output) {
+  CTCAEv4_subset1 <- reactive({
+    display_column(CTCAEv4, input$display, "MedDRA") %>% 
+    display_column(input$display, "Definition") %>% 
+    display_column(input$display, "Errata")
+  })
+  
+  CTCAEv5_subset1 <- reactive({
+    display_column(CTCAEv5, input$display, "MedDRA") %>% 
+      display_column(input$display, "Definition") %>% 
+      display_column(input$display, "Note") %>% 
+      display_column(input$display, "Change")
+  })
+  
   CTCAEv4_subset2 <- reactive({
     if(input$SOC == "All") {
-      return(CTCAEv4)
+      return(CTCAEv4_subset1())
     }else{
-      filter(CTCAEv4, CTCAE_v4.0_SOC == input$SOC)
+      filter(CTCAEv4_subset1(), CTCAE_v4.0_SOC == input$SOC)
     }
   })
   
   CTCAEv5_subset2 <- reactive({
     if(input$SOC == "All") {
-      return(CTCAEv5)
+      return(CTCAEv5_subset1())
     }else{
-      filter(CTCAEv5, CTCAE_v4.0_SOC == input$SOC)
+      filter(CTCAEv5_subset1(), CTCAE_v4.0_SOC == input$SOC)
     }
   })
   

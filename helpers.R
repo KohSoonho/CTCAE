@@ -34,6 +34,28 @@ CTCAEv4 <- CTCAE4 %>%
          Errata = "Errata")
 
 
+# Select Displayed Column -------------------------------------------------
+str_detect_all <- function(x, y) {
+  ifelse(identical(str_detect(x, y), rep(F, length(x))), F, T)
+}
+
+display_column <- function(df, x, chr) {
+  if(str_detect_all(x, chr) == T) {
+    return(df)
+  }else{
+    select(df, -contains(chr))
+  }
+}
+
+select_display_ver4 <- function(df, x) {
+  display_column(df, x, "MedDRA") %>% 
+  display_column(x, "SOC") %>% 
+  display_column(x, "Term") %>% 
+  display_column(x, "Grade") %>% 
+  display_column(x, "Definition") %>% 
+  display_column(x, "Errata")
+}
+
 # Select Grade ------------------------------------------------------------
 
 select_grade <- function(df, x, y) {
@@ -43,4 +65,3 @@ select_grade <- function(df, x, y) {
  delete <- n + all[-range] -1
  select(df, -delete)
 }
-
