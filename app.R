@@ -10,16 +10,6 @@ source("helpers.R")
 ui <- fluidPage(
   titlePanel(h1("CTCAE")),  
     sidebarLayout(
-      sidebarPanel(checkboxGroupInput("display", label = h3("Displayed Column"), 
-                                      choices = list("MedDRA" = 1, 
-                                                     "SOC" = 2, 
-                                                     "Term" = 3, 
-                                                     "Grade" = 4:8, 
-                                                     "Definition" = 9, 
-                                                     "Errata(v4.0)" = "Errata", 
-                                                     "Note(v5.0)" = "Note", 
-                                                     "Change(v5.0)" = "Change"), 
-                                      select = c()), 
                    selectInput("SOC", label = h3("System Organ Class (SOC)"), 
                                       choices = list("All" = "All", 
                                                      "Blood and lymphatic" = "Blood and lymphatic system disorders", 
