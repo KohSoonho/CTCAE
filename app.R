@@ -10,8 +10,9 @@ source("helpers.R")
 ui <- fluidPage(
   titlePanel(h1("CTCAE")),  
     sidebarLayout(
-      sidebarPanel(checkboxGroupInput("SOC", label = h3("System Organ Class (SOC)"), 
-                                      choices = list("Blood and lymphatic" = "Blood and lymphatic system disorders", 
+                   selectInput("SOC", label = h3("System Organ Class (SOC)"), 
+                                      choices = list("All" = "All", 
+                                                     "Blood and lymphatic" = "Blood and lymphatic system disorders", 
                                                      "Cardiac" = "Cardiac disorders", 
                                                      "Congenital" = "Congenital, familial and genetic disorders", 
                                                      "Ear and labyrinth" = "Ear and labyrinth disorders", 
@@ -37,32 +38,11 @@ ui <- fluidPage(
                                                      "Social circumstances" = "Social circumstances", 
                                                      "Surgical, medical procedures" = "Surgical and medical procedures", 
                                                      "Vascular" = "Vascular disorders"),
-                                      selected = c("Blood and lymphatic system disorders", 
-                                                   "Cardiac disorders", 
-                                                   "Congenital, familial and genetic disorders", 
-                                                   "Ear and labyrinth disorders",                                                      "Endocrine disorders", 
-                                                   "Eye disorders", 
-                                                   "Gastrointestinal disorders", 
-                                                   "General disorders and administration site conditions", 
-                                                   "Hepatobiliary disorders", 
-                                                   "Immune system disorders", 
-                                                   "Infections and infestations", 
-                                                   "Injury, poisoning and procedural complications", 
-                                                   "Investigations", 
-                                                   "Metabolism and nutrition disorders", 
-                                                   "Musculoskeletal and connective tissue disorders", 
-                                                   "Neoplasms benign, malignant and unspecified (incl cysts and polyps)", 
-                                                   "Nervous system disorders", 
-                                                   "Pregnancy, puerperium and perinatal conditions", 
-                                                   "Psychiatric disorders", 
-                                                   "Renal and urinary disorders", 
-                                                   "Reproductive system and breast disorders", 
-                                                   "Respiratory, thoracic and mediastinal disorders", 
-                                                   "Skin and subcutaneous tissue disorders", 
-                                                   "Social circumstances", 
-                                                   "Surgical and medical procedures", 
-                                                   "Vascular disorders")
-                                        )), 
+                                      selected = "All"
+                                        ), 
+                   sliderInput("Grade", label = h3("CTCAE Grade"), 
+                               min = 1, max = 5, value = c(1, 5))
+                   ), 
         mainPanel(tabsetPanel(type = "tabs",
                               tabPanel("ver.4.0.3", DT::dataTableOutput("dtl1")),
                               tabPanel("ver 5.0", DT::dataTableOutput("dtl2"))
@@ -73,17 +53,33 @@ ui <- fluidPage(
 # Server logic----
 
 server <- function(input, output) {
-  CTCAEv4_subset <- reactive({
-    filter(CTCAEv4, CTCAE_v4.0_SOC %in% input$SOC)
+  CTCAEv4_subset2 <- reactive({
+    if(input$SOC == "All") {
+      return(CTCAEv4)
+    }else{
+      filter(CTCAEv4, CTCAE_v4.0_SOC == input$SOC)
+    }
   })
   
-  CTCAEv5_subset <- reactive({
-    filter(CTCAEv5, MedDRA_SOC %in% input$SOC)
+  CTCAEv5_subset2 <- reactive({
+    if(input$SOC == "All") {
+      return(CTCAEv5)
+    }else{
+      filter(CTCAEv5, CTCAE_v4.0_SOC == input$SOC)
+    }
   })
   
-  output$dtl1 <- DT::renderDataTable(CTCAEv4_subset())
+  CTCAEv4_subset3 <- reactive({
+    select_grade(CTCAEv4_subset2(), input$Grade[1], input$Grade[2])
+  })
   
-  output$dtl2 <- DT::renderDataTable(CTCAEv5_subset())
+  CTCAEv5_subset3 <- reactive({
+    select_grade(CTCAEv5_subset2(), input$Grade[1], input$Grade[2])
+  })
+  
+  output$dtl1 <- DT::renderDataTable(CTCAEv4_subset3())
+  
+  output$dtl2 <- DT::renderDataTable(CTCAEv5_subset3())
 }
 
 # Run the app

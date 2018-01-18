@@ -33,3 +33,14 @@ CTCAEv4 <- CTCAE4 %>%
          Definition = "CTCAE v4.0 AE Term Definition", 
          Errata = "Errata")
 
+
+# Select Grade ------------------------------------------------------------
+
+select_grade <- function(df, x, y) {
+ n <- ncol(select(df, 1:Grade_1))
+ all <- 1:5
+ range <- seq(x, y, by = 1)
+ delete <- n + all[-range] -1
+ select(df, -delete)
+}
+
