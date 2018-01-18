@@ -8,8 +8,11 @@ source("helpers.R")
 
 # User interface ----
 ui <- fluidPage(
-  titlePanel(h1("CTCAE")),  
+  
+  titlePanel(h1("CTCAE")), 
+  
     sidebarLayout(
+      
       sidebarPanel(width = 3, 
                    checkboxGroupInput("display", label = h3("View Hidden Column"), 
                                       choices = list("MedDRA" = "MedDRA", 
@@ -18,6 +21,7 @@ ui <- fluidPage(
                                                      "Note(v5.0)" = "Note", 
                                                      "Change(v5.0)" = "Change"), 
                                       select = c("SOC", "Term", "Grade")), 
+                   
                    selectInput("SOC", label = h3("System Organ Class (SOC)"), 
                                       choices = list("All" = "All", 
                                                      "Blood and lymphatic" = "Blood and lymphatic system disorders", 
@@ -48,26 +52,37 @@ ui <- fluidPage(
                                                      "Vascular" = "Vascular disorders"),
                                       selected = "All"
                                         ), 
+                   
                    textInput("term", label = h3("Search Term"), value = ""), 
+                   
                    sliderInput("Grade", label = h3("CTCAE Grade"), 
                                min = 1, max = 5, value = c(1, 5)), 
+                   
                    h3("Reference"), 
+                   
                    tags$a(href = "https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm", 
                           "National Institutes of health (NIH)"), 
                    br(), 
+                   
                    tags$a(href = "http://www.jcog.jp/doctor/tool/CTCAEv4J_20100911.pdf", 
                           "JCOG (Japanese, v4.03)"), 
+                   
                    h3("Search English"), 
+                   
                    tags$a(href = "https://lsd-project.jp/cgi-bin/lsdproj/ejlookup04.pl", 
                           "Life Science Dictionary"), 
                    br(), 
+                   
                    tags$a(href = "https://ejje.weblio.jp", "Weblio Dictionary")
                    ), 
+      
     mainPanel(width = 9, tabsetPanel(type = "tabs",
                          tabPanel("ver.4.0.3", DT::dataTableOutput("dtl1")),
                          tabPanel("ver 5.0", DT::dataTableOutput("dtl2")))
               ) 
+      
   )
+  
 )
 
 # Server logic----
