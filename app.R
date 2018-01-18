@@ -10,7 +10,8 @@ source("helpers.R")
 ui <- fluidPage(
   titlePanel(h1("CTCAE")),  
     sidebarLayout(
-      sidebarPanel(checkboxGroupInput("display", label = h3("View Hidden Column"), 
+      sidebarPanel(width = 3, 
+                   checkboxGroupInput("display", label = h3("View Hidden Column"), 
                                       choices = list("MedDRA" = "MedDRA", 
                                                      "Definition" = "Definition", 
                                                      "Errata(v4.0)" = "Errata", 
@@ -50,12 +51,12 @@ ui <- fluidPage(
                    sliderInput("Grade", label = h3("CTCAE Grade"), 
                                min = 1, max = 5, value = c(1, 5))
                    ), 
-        mainPanel(tabsetPanel(type = "tabs",
-                              tabPanel("ver.4.0.3", DT::dataTableOutput("dtl1")),
-                              tabPanel("ver 5.0", DT::dataTableOutput("dtl2"))
-                              ))
-    ) 
+    mainPanel(width = 9, tabsetPanel(type = "tabs",
+                         tabPanel("ver.4.0.3", DT::dataTableOutput("dtl1")),
+                         tabPanel("ver 5.0", DT::dataTableOutput("dtl2")))
+             ) 
   )
+)
 
 # Server logic----
 
