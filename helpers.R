@@ -47,14 +47,6 @@ display_column <- function(df, x, chr) {
   }
 }
 
-select_display_ver4 <- function(df, x) {
-  display_column(df, x, "MedDRA") %>% 
-  display_column(x, "SOC") %>% 
-  display_column(x, "Term") %>% 
-  display_column(x, "Grade") %>% 
-  display_column(x, "Definition") %>% 
-  display_column(x, "Errata")
-}
 
 # Select Grade ------------------------------------------------------------
 

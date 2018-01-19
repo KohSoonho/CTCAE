@@ -19,8 +19,8 @@ ui <- fluidPage(
                                                      "Definition" = "Definition", 
                                                      "Errata(v4.0)" = "Errata", 
                                                      "Note(v5.0)" = "Note", 
-                                                     "Change(v5.0)" = "Change"), 
-                                      select = c("SOC", "Term", "Grade")), 
+                                                     "Change(v5.0)" = "Change") 
+                                      ), 
                    
                    selectInput("SOC", label = h3("System Organ Class (SOC)"), 
                                       choices = list("All" = "All", 
