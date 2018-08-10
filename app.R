@@ -68,6 +68,11 @@ ui <- fluidPage(
                    
                    tags$a(href = "http://www.jcog.jp/doctor/tool/CTCAEv4J_20100911.pdf", 
                           "JCOG (Japanese, v4.03)"), 
+                 
+                   br(), 
+                 
+                   tags$a(href = "http://www.jcog.jp/doctor/tool/CTCAEv5J_20180730_v21_0.pdf", 
+                          "JCOG (Japanese, v5.0)"), 
                    
                    h3("Search English"), 
                    
